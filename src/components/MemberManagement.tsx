@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { 
   Users, UserPlus, Search, Filter, Phone, Mail, 
-  MapPin, Calendar, Family, Edit, Eye, Trash2 
+  MapPin, Calendar, Edit, Eye, Trash2 
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -119,7 +119,7 @@ export const MemberManagement = () => {
                 <p className="text-sm text-gray-600">Families</p>
                 <p className="text-2xl font-bold text-gray-900">456</p>
               </div>
-              <Family className="w-8 h-8 text-purple-600" />
+              <Users className="w-8 h-8 text-purple-600" />
             </div>
           </CardContent>
         </Card>
