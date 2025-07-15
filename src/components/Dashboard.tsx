@@ -1,69 +1,162 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Users, DollarSign, Calendar, TrendingUp, 
-  UserPlus, Heart, Clock, AlertCircle 
+  UserPlus, Heart, Clock, AlertCircle, CheckSquare,
+  FileText, Moon, Sun, Plus
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useTheme } from 'next-themes';
+import { 
+  LineChart, Line, AreaChart, Area, BarChart, Bar, 
+  PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, 
+  Tooltip, ResponsiveContainer 
+} from 'recharts';
+
+// Add Member Modal Component
+const AddMemberModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-card p-6 rounded-lg w-96 max-w-md mx-4">
+        <h3 className="text-lg font-semibold mb-4">Add New Member</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Full Name</label>
+            <input type="text" className="w-full p-2 border rounded-md" placeholder="Enter full name" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <input type="email" className="w-full p-2 border rounded-md" placeholder="Enter email address" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Phone</label>
+            <input type="tel" className="w-full p-2 border rounded-md" placeholder="Enter phone number" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Address</label>
+            <textarea className="w-full p-2 border rounded-md" rows={3} placeholder="Enter address"></textarea>
+          </div>
+        </div>
+        <div className="flex justify-end space-x-2 mt-6">
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>Add Member</Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const Dashboard = () => {
+  const { theme, setTheme } = useTheme();
+  const [showAddMember, setShowAddMember] = useState(false);
+
   const stats = [
     {
-      title: "Total Members",
-      value: "1,247",
-      change: "+12 this month",
+      title: "Total Tasks",
+      value: "0",
+      change: "(0 Completed)",
+      icon: CheckSquare,
+      color: "text-primary"
+    },
+    {
+      title: "Members",
+      value: "0",
+      change: "(0 Active)",
       icon: Users,
-      color: "from-blue-500 to-blue-600"
+      color: "text-primary"
     },
     {
-      title: "Monthly Donations",
-      value: "$34,567",
-      change: "+8.2% from last month",
+      title: "Balance",
+      value: "R 0.00",
+      change: "Current balance (0% +73.1%)",
       icon: DollarSign,
-      color: "from-green-500 to-green-600"
+      color: "text-primary"
     },
     {
-      title: "Events This Month",
-      value: "23",
-      change: "5 upcoming",
+      title: "Programmes",
+      value: "0",
+      change: "Active programmes (0 active)",
       icon: Calendar,
-      color: "from-purple-500 to-purple-600"
-    },
-    {
-      title: "Growth Rate",
-      value: "12.5%",
-      change: "Year over year",
-      icon: TrendingUp,
-      color: "from-orange-500 to-orange-600"
+      color: "text-primary"
     }
   ];
 
+  // Sample data for charts (will be replaced with real data)
+  const monthlyRevenueData = [
+    { month: 'Jan', Income: 0, Expenses: 0 },
+    { month: 'Feb', Income: 0, Expenses: 0 },
+    { month: 'Mar', Income: 0, Expenses: 0 },
+    { month: 'Apr', Income: 0, Expenses: 0 },
+    { month: 'May', Income: 0, Expenses: 0 },
+    { month: 'Jun', Income: 0, Expenses: 0 },
+    { month: 'Jul', Income: 0, Expenses: 0 },
+    { month: 'Aug', Income: 0, Expenses: 0 },
+    { month: 'Sep', Income: 0, Expenses: 0 },
+    { month: 'Oct', Income: 0, Expenses: 0 },
+    { month: 'Nov', Income: 0, Expenses: 0 },
+    { month: 'Dec', Income: 0, Expenses: 0 },
+  ];
+
+  const weeklyActivityData = [
+    { day: 'Mon', Tasks: 0, Documents: 0 },
+    { day: 'Tue', Tasks: 0, Documents: 0 },
+    { day: 'Wed', Tasks: 0, Documents: 0 },
+    { day: 'Thu', Tasks: 0, Documents: 0 },
+    { day: 'Fri', Tasks: 0, Documents: 0 },
+    { day: 'Sat', Tasks: 0, Documents: 0 },
+    { day: 'Sun', Tasks: 0, Documents: 0 },
+  ];
+
+  const taskStatusData = [
+    { name: 'Completed', value: 0, color: '#22c55e' },
+    { name: 'In Progress', value: 0, color: '#f59e0b' },
+    { name: 'Pending', value: 0, color: '#ef4444' },
+  ];
+
+  const financialOverviewData = [
+    { name: 'Income', value: 0, color: '#22c55e' },
+    { name: 'Expenses', value: 0, color: '#ef4444' },
+  ];
+
   const recentActivities = [
-    { type: "New Member", description: "Sarah Johnson joined the congregation", time: "2 hours ago", icon: UserPlus },
-    { type: "Donation", description: "Anonymous donation of $500", time: "4 hours ago", icon: Heart },
-    { type: "Event", description: "Youth Group meeting scheduled", time: "6 hours ago", icon: Calendar },
-    { type: "Volunteer", description: "Mike Davis signed up for Sunday service", time: "8 hours ago", icon: Clock },
+    { type: "Task", description: "Task 'Task 1' was in-progress", time: "Just now", icon: CheckSquare },
   ];
 
   const upcomingEvents = [
-    { title: "Sunday Service", time: "10:00 AM", date: "Tomorrow", attendees: 450 },
-    { title: "Bible Study", time: "7:00 PM", date: "Wednesday", attendees: 85 },
-    { title: "Youth Group", time: "6:30 PM", date: "Friday", attendees: 32 },
-    { title: "Community Outreach", time: "9:00 AM", date: "Saturday", attendees: 25 },
+    { title: "Task 1", time: "Tomorrow", date: "1 assignee", attendees: "1 assignee" },
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-background text-foreground min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Welcome back! Here's what's happening at your church.</p>
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">New Vision of God Church</p>
         </div>
-        <div className="flex items-center space-x-2 text-sm text-gray-500">
-          <Clock className="w-4 h-4" />
-          <span>Last updated: {new Date().toLocaleTimeString()}</span>
+        <div className="flex items-center space-x-4">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          >
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Clock className="w-4 h-4" />
+            <span>Last updated: {new Date().toLocaleTimeString()}</span>
+          </div>
         </div>
+      </div>
+
+      {/* Navigation Tabs */}
+      <div className="flex space-x-1 bg-muted p-1 rounded-lg w-fit">
+        <Button variant="default" size="sm" className="bg-primary text-primary-foreground">Overview</Button>
+        <Button variant="ghost" size="sm">Tasks</Button>
+        <Button variant="ghost" size="sm">Finance</Button>
+        <Button variant="ghost" size="sm">Team</Button>
       </div>
 
       {/* Stats Grid */}
@@ -71,48 +164,160 @@ export const Dashboard = () => {
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <Card key={index} className="relative overflow-hidden">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">
-                  {stat.title}
-                </CardTitle>
-                <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${stat.color} flex items-center justify-center`}>
-                  <Icon className="w-5 h-5 text-white" />
+            <Card key={index} className="bg-card border-border">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">{stat.title}</p>
+                    <p className="text-2xl font-bold mt-2">{stat.value}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{stat.change}</p>
+                  </div>
+                  <Icon className={`w-8 h-8 ${stat.color}`} />
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <p className="text-xs text-green-600 mt-1">{stat.change}</p>
               </CardContent>
             </Card>
           );
         })}
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Monthly Revenue Chart */}
+        <Card className="bg-card border-border">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <span>Monthly Revenue</span>
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">Income and expenses over the past 6 months</p>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={monthlyRevenueData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))', 
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px'
+                  }} 
+                />
+                <Line type="monotone" dataKey="Income" stroke="#22c55e" strokeWidth={2} />
+                <Line type="monotone" dataKey="Expenses" stroke="#ef4444" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Task Status Donut Chart */}
+        <Card className="bg-card border-border">
+          <CardHeader>
+            <CardTitle>Task Status</CardTitle>
+            <p className="text-sm text-muted-foreground">Current task distribution</p>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={taskStatusData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={120}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {taskStatusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Weekly Activity */}
+        <Card className="bg-card border-border">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Calendar className="w-5 h-5" />
+              <span>Weekly Activity</span>
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">Tasks and documents created</p>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={weeklyActivityData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))', 
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px'
+                  }} 
+                />
+                <Area type="monotone" dataKey="Tasks" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+                <Area type="monotone" dataKey="Documents" stackId="1" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.6} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Financial Overview */}
+        <Card className="bg-card border-border">
+          <CardHeader>
+            <CardTitle>Financial Overview</CardTitle>
+            <p className="text-sm text-muted-foreground">Income vs Expenses</p>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={financialOverviewData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))', 
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px'
+                  }} 
+                />
+                <Bar dataKey="value" fill="hsl(var(--primary))" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Activity and Events */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activities */}
-        <Card className="lg:col-span-2">
+        <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <AlertCircle className="w-5 h-5" />
-              <span>Recent Activities</span>
+              <span>Recent Activity</span>
             </CardTitle>
+            <p className="text-sm text-muted-foreground">Latest actions and updates</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {recentActivities.map((activity, index) => {
                 const Icon = activity.icon;
                 return (
-                  <div key={index} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-blue-600" />
+                  <div key={index} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-muted/50 transition-colors">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">{activity.type}</p>
-                      <p className="text-sm text-gray-600">{activity.description}</p>
+                      <p className="font-medium">{activity.type}</p>
+                      <p className="text-sm text-muted-foreground">{activity.description}</p>
                     </div>
-                    <span className="text-xs text-gray-500">{activity.time}</span>
+                    <span className="text-xs text-muted-foreground">{activity.time}</span>
                   </div>
                 );
               })}
@@ -121,20 +326,21 @@ export const Dashboard = () => {
         </Card>
 
         {/* Upcoming Events */}
-        <Card>
+        <Card className="bg-card border-border">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Calendar className="w-5 h-5" />
               <span>Upcoming Events</span>
             </CardTitle>
+            <p className="text-sm text-muted-foreground">Deadlines and meetings</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {upcomingEvents.map((event, index) => (
-                <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
-                  <h4 className="font-medium text-gray-900">{event.title}</h4>
-                  <p className="text-sm text-gray-600">{event.date} at {event.time}</p>
-                  <p className="text-xs text-gray-500">{event.attendees} expected attendees</p>
+                <div key={index} className="border-l-4 border-primary pl-4 py-2">
+                  <h4 className="font-medium">{event.title}</h4>
+                  <p className="text-sm text-muted-foreground">{event.date} at {event.time}</p>
+                  <p className="text-xs text-muted-foreground">{event.attendees}</p>
                 </div>
               ))}
             </div>
@@ -142,32 +348,8 @@ export const Dashboard = () => {
         </Card>
       </div>
 
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <button className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all">
-              <UserPlus className="w-6 h-6 mx-auto mb-2" />
-              <span className="text-sm font-medium">Add Member</span>
-            </button>
-            <button className="p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:shadow-lg transition-all">
-              <DollarSign className="w-6 h-6 mx-auto mb-2" />
-              <span className="text-sm font-medium">Record Donation</span>
-            </button>
-            <button className="p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all">
-              <Calendar className="w-6 h-6 mx-auto mb-2" />
-              <span className="text-sm font-medium">Schedule Event</span>
-            </button>
-            <button className="p-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:shadow-lg transition-all">
-              <Heart className="w-6 h-6 mx-auto mb-2" />
-              <span className="text-sm font-medium">Send Message</span>
-            </button>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Modals */}
+      <AddMemberModal isOpen={showAddMember} onClose={() => setShowAddMember(false)} />
     </div>
   );
 };

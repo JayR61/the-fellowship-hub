@@ -12,6 +12,12 @@ import { Reports } from '@/components/Reports';
 import { ResourceManagement } from '@/components/ResourceManagement';
 import { UserManagement } from '@/components/UserManagement';
 import { Settings } from '@/components/Settings';
+import { Documents } from '@/components/Documents';
+import { Mentorship } from '@/components/Mentorship';
+import { Volunteers } from '@/components/Volunteers';
+import { Programmes } from '@/components/Programmes';
+import { Projects } from '@/components/Projects';
+import { SocialMedia } from '@/components/SocialMedia';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -33,10 +39,22 @@ const Index = () => {
         return <Communications />;
       case 'checkin':
         return <CheckInSystem />;
-      case 'reports':
-        return <Reports />;
+      case 'documents':
+        return <Documents />;
+      case 'mentorship':
+        return <Mentorship />;
+      case 'volunteers':
+        return <Volunteers />;
+      case 'programmes':
+        return <Programmes />;
+      case 'projects':
+        return <Projects />;
       case 'resources':
         return <ResourceManagement />;
+      case 'social-media':
+        return <SocialMedia />;
+      case 'reports':
+        return <Reports />;
       case 'users':
         return <UserManagement />;
       case 'settings':
@@ -47,7 +65,7 @@ const Index = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="flex h-screen bg-background">
       <Sidebar 
         currentView={currentView}
         setCurrentView={setCurrentView}
