@@ -18,6 +18,7 @@ import { Volunteers } from '@/components/Volunteers';
 import { Programmes } from '@/components/Programmes';
 import { Projects } from '@/components/Projects';
 import { SocialMedia } from '@/components/SocialMedia';
+import { Tasks } from '@/components/Tasks';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -27,18 +28,12 @@ const Index = () => {
     switch (currentView) {
       case 'dashboard':
         return <Dashboard />;
+      case 'tasks':
+        return <Tasks />;
       case 'members':
         return <MemberManagement />;
       case 'financial':
         return <FinancialManagement />;
-      case 'calendar':
-        return <EventCalendar />;
-      case 'ministry':
-        return <MinistryTeams />;
-      case 'communications':
-        return <Communications />;
-      case 'checkin':
-        return <CheckInSystem />;
       case 'documents':
         return <Documents />;
       case 'mentorship':
@@ -53,10 +48,6 @@ const Index = () => {
         return <ResourceManagement />;
       case 'social-media':
         return <SocialMedia />;
-      case 'reports':
-        return <Reports />;
-      case 'users':
-        return <UserManagement />;
       case 'settings':
         return <Settings />;
       default:

@@ -1,226 +1,278 @@
-
 import React, { useState } from 'react';
-import { 
-  Users, UserPlus, Search, Filter, Phone, Mail, 
-  MapPin, Calendar, Edit, Eye, Trash2 
-} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { 
+  Users, UserPlus, Search, Download, MoreHorizontal,
+  Mail, Phone, Calendar, UserCheck, UserMinus, Eye, Edit, Trash2
+} from 'lucide-react';
 
 export const MemberManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [selectedRole, setSelectedRole] = useState('All Roles');
+  const [selectedStatus, setSelectedStatus] = useState('All Statuses');
+  const [selectedTab, setSelectedTab] = useState('All Members');
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [newMember, setNewMember] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    role: '',
+    dateJoined: new Date()
+  });
 
+  // Sample member data matching the reference image
   const members = [
     {
       id: 1,
-      name: "John Smith",
-      email: "john.smith@email.com",
-      phone: "(555) 123-4567",
-      address: "123 Main St, City, ST 12345",
-      memberSince: "2020-01-15",
-      status: "Active",
-      family: "Smith Family",
-      ministry: "Worship Team",
-      lastAttendance: "2024-01-14",
-      photo: "/api/placeholder/64/64"
-    },
-    {
-      id: 2,
-      name: "Sarah Johnson",
-      email: "sarah.johnson@email.com",
-      phone: "(555) 234-5678",
-      address: "456 Oak Ave, City, ST 12345",
-      memberSince: "2021-03-20",
-      status: "Active",
-      family: "Johnson Family",
-      ministry: "Children's Ministry",
-      lastAttendance: "2024-01-14",
-      photo: "/api/placeholder/64/64"
-    },
-    {
-      id: 3,
-      name: "Michael Davis",
-      email: "mike.davis@email.com",
-      phone: "(555) 345-6789",
-      address: "789 Pine St, City, ST 12345",
-      memberSince: "2019-11-10",
-      status: "Active",
-      family: "Davis Family",
-      ministry: "Youth Ministry",
-      lastAttendance: "2024-01-07",
-      photo: "/api/placeholder/64/64"
+      name: 'Kig Yende',
+      email: 'sizweyende518@gmail.com',
+      phone: '0734783410',
+      role: 'Full Member',
+      status: 'Active',
+      dateJoined: '7/12/2025',
+      avatar: null
     }
   ];
+
+  const memberStats = [
+    { title: 'Total Members', value: '1', icon: Users },
+    { title: 'Active Members', value: '1', icon: UserCheck },
+    { title: 'New Members', value: '0', icon: UserPlus },
+    { title: 'Visitors & Prospects', value: '0', icon: UserMinus }
+  ];
+
+  const tabs = ['All Members', 'Active', 'New Members', 'Visitors & Prospects', 'Inactive'];
+  const roles = ['All Roles', 'Full Member', 'Visitor', 'Prospect'];
+  const statuses = ['All Statuses', 'Active', 'Inactive', 'Pending'];
 
   const filteredMembers = members.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          member.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || member.status.toLowerCase() === filterStatus;
-    return matchesSearch && matchesFilter;
+    const matchesRole = selectedRole === 'All Roles' || member.role === selectedRole;
+    const matchesStatus = selectedStatus === 'All Statuses' || member.status === selectedStatus;
+    return matchesSearch && matchesRole && matchesStatus;
   });
+
+  const handleAddMember = () => {
+    console.log('Adding member:', newMember);
+    setIsAddDialogOpen(false);
+    setNewMember({
+      name: '',
+      email: '',
+      phone: '',
+      role: '',
+      dateJoined: new Date()
+    });
+  };
 
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Member Management</h1>
-          <p className="text-gray-600 mt-1">Manage your church community members</p>
+          <h1 className="text-3xl font-bold text-foreground">Members</h1>
         </div>
-        <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-          <UserPlus className="w-4 h-4 mr-2" />
-          Add New Member
-        </Button>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="bg-primary hover:bg-primary/90">
+              <UserPlus className="w-4 h-4 mr-2" />
+              Add Member
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Add New Member</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name">Full Name</Label>
+                <Input
+                  id="name"
+                  value={newMember.name}
+                  onChange={(e) => setNewMember({ ...newMember, name: e.target.value })}
+                  placeholder="Enter full name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={newMember.email}
+                  onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
+                  placeholder="Enter email address"
+                />
+              </div>
+              <div>
+                <Label htmlFor="phone">Phone</Label>
+                <Input
+                  id="phone"
+                  value={newMember.phone}
+                  onChange={(e) => setNewMember({ ...newMember, phone: e.target.value })}
+                  placeholder="Enter phone number"
+                />
+              </div>
+              <div>
+                <Label>Role</Label>
+                <Select onValueChange={(value) => setNewMember({ ...newMember, role: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {roles.filter(role => role !== 'All Roles').map((role) => (
+                      <SelectItem key={role} value={role}>
+                        {role}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button onClick={handleAddMember} className="w-full">
+                Add Member
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total Members</p>
-                <p className="text-2xl font-bold text-gray-900">1,247</p>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {memberStats.map((stat, index) => (
+          <Card key={index} className="bg-card border-border">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                  <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+                </div>
+                <stat.icon className="w-8 h-8 text-muted-foreground" />
               </div>
-              <Users className="w-8 h-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Active Members</p>
-                <p className="text-2xl font-bold text-gray-900">1,189</p>
-              </div>
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <div className="w-4 h-4 bg-green-600 rounded-full"></div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">New This Month</p>
-                <p className="text-2xl font-bold text-gray-900">12</p>
-              </div>
-              <UserPlus className="w-8 h-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Families</p>
-                <p className="text-2xl font-bold text-gray-900">456</p>
-              </div>
-              <Users className="w-8 h-8 text-purple-600" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* Search and Filter */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input
-                placeholder="Search members by name or email..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Filter className="w-4 h-4 text-gray-600" />
-                <select 
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-                >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="visitor">Visitor</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Member Tabs */}
+      <div className="flex space-x-1 bg-muted p-1 rounded-lg w-fit">
+        {tabs.map((tab) => (
+          <Button
+            key={tab}
+            variant={selectedTab === tab ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setSelectedTab(tab)}
+            className={selectedTab === tab ? "bg-background shadow-sm" : ""}
+          >
+            {tab}
+          </Button>
+        ))}
+      </div>
 
-      {/* Members List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Members Directory</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {filteredMembers.map((member) => (
-              <div key={member.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                      {member.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900">{member.name}</h3>
-                      <div className="flex items-center space-x-4 text-sm text-gray-600 mt-1">
-                        <div className="flex items-center space-x-1">
-                          <Mail className="w-4 h-4" />
-                          <span>{member.email}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Phone className="w-4 h-4" />
-                          <span>{member.phone}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <MapPin className="w-4 h-4" />
-                          <span>{member.address}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500 mt-2">
-                        <span>Family: {member.family}</span>
-                        <span>Ministry: {member.ministry}</span>
-                        <span>Member Since: {new Date(member.memberSince).toLocaleDateString()}</span>
-                        <span>Last Attendance: {new Date(member.lastAttendance).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      member.status === 'Active' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      {member.status}
-                    </span>
-                    <div className="flex items-center space-x-1">
-                      <Button variant="ghost" size="sm">
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
+      {/* Search and Filter Controls */}
+      <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+        <div className="relative w-full lg:w-80">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+          <Input
+            placeholder="Search members..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+        
+        <div className="flex items-center space-x-4">
+          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <SelectTrigger className="w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {statuses.map((status) => (
+                <SelectItem key={status} value={status}>
+                  {status}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          <Select value={selectedRole} onValueChange={setSelectedRole}>
+            <SelectTrigger className="w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {roles.map((role) => (
+                <SelectItem key={role} value={role}>
+                  {role}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          <Button variant="outline">
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </Button>
+        </div>
+      </div>
+
+      {/* Member List */}
+      <Card className="bg-card border-border">
+        <CardContent className="p-0">
+          {filteredMembers.map((member) => (
+            <div key={member.id} className="flex items-center justify-between p-6 border-b border-border last:border-b-0">
+              <div className="flex items-center space-x-4">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                  <span className="text-primary-foreground text-sm font-bold">
+                    {member.name.split(' ').map(n => n[0]).join('')}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-medium text-foreground">{member.name}</h3>
+                  <Badge variant="secondary" className="mt-1 text-xs">
+                    {member.role}
+                  </Badge>
                 </div>
               </div>
-            ))}
-          </div>
+              
+              <div className="flex items-center space-x-8 text-sm text-muted-foreground">
+                <div className="flex items-center space-x-1">
+                  <Mail className="w-4 h-4" />
+                  <span>{member.email}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Phone className="w-4 h-4" />
+                  <span>{member.phone}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Calendar className="w-4 h-4" />
+                  <span>Joined: {member.dateJoined}</span>
+                </div>
+              </div>
+              
+              <Button variant="ghost" size="sm">
+                <MoreHorizontal className="w-4 h-4" />
+              </Button>
+            </div>
+          ))}
         </CardContent>
       </Card>
+
+      {/* Success Toast */}
+      <div className="fixed bottom-4 right-4 bg-card border border-border rounded-lg p-4 shadow-lg">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+            <UserCheck className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <p className="font-medium text-foreground">Member created successfully</p>
+            <p className="text-sm text-muted-foreground">Kig Yende has been added to the system.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

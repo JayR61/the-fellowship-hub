@@ -4,7 +4,7 @@ import {
   MessageSquare, Shield, BarChart3, FolderOpen, 
   Settings, ChevronLeft, ChevronRight, Church, 
   FileText, GraduationCap, Heart, Briefcase, 
-  Share2, Lock, Unlock
+  Share2, Lock, Unlock, CheckSquare, Archive, LayoutDashboard, Menu
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -26,21 +26,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [expandedOnHover, setExpandedOnHover] = useState(false);
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Home },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
     { id: 'members', label: 'Members', icon: Users },
-    { id: 'financial', label: 'Financial', icon: DollarSign },
-    { id: 'calendar', label: 'Calendar', icon: Calendar },
-    { id: 'ministry', label: 'Ministry Teams', icon: UserCheck },
-    { id: 'communications', label: 'Communications', icon: MessageSquare },
-    { id: 'checkin', label: 'Check-In', icon: Shield },
+    { id: 'financial', label: 'Finance', icon: DollarSign },
     { id: 'documents', label: 'Documents', icon: FileText },
     { id: 'mentorship', label: 'Mentorship', icon: GraduationCap },
     { id: 'volunteers', label: 'Volunteers', icon: Heart },
     { id: 'programmes', label: 'Programmes', icon: Briefcase },
     { id: 'projects', label: 'Projects', icon: FolderOpen },
-    { id: 'resources', label: 'Resources', icon: FolderOpen },
+    { id: 'resources', label: 'Resources', icon: Archive },
     { id: 'social-media', label: 'Social Media', icon: Share2 },
-    { id: 'reports', label: 'Reports', icon: BarChart3 },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
@@ -60,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div 
       className={cn(
-        "fixed left-0 top-0 h-full bg-sidebar border-r border-sidebar-border shadow-xl transition-all duration-300 z-50",
+        "fixed left-0 top-0 h-full bg-sidebar border-r border-sidebar-border shadow-xl transition-all duration-300 z-50 overflow-y-auto scrollbar-thin scrollbar-thumb-sidebar-border scrollbar-track-transparent",
         shouldShowExpanded ? "w-64" : "w-16"
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -74,8 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           {shouldShowExpanded && (
             <div>
-              <h1 className="text-lg font-bold text-sidebar-foreground">Fellowship Hub</h1>
-              <p className="text-xs text-muted-foreground">Church Management</p>
+              <h1 className="text-lg font-bold text-sidebar-foreground">Church Manager</h1>
             </div>
           )}
         </div>
@@ -131,10 +126,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {shouldShowExpanded && (
         <div className="absolute bottom-4 left-4 right-4">
           <div className="bg-sidebar-accent rounded-lg p-3">
-            <p className="text-xs text-muted-foreground text-center">
-              © 2024 Fellowship Hub<br />
-              Church Management System
-            </p>
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-primary-foreground text-xs font-bold">AU</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-sidebar-foreground truncate">Admin User</p>
+              </div>
+            </div>
           </div>
         </div>
       )}
