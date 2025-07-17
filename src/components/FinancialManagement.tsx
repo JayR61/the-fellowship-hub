@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { 
   DollarSign, TrendingUp, TrendingDown, PieChart, 
-  Plus, Download, Calendar, CreditCard, Receipt 
+  Plus, Download, Calendar, CreditCard, Receipt,
+  Eye, MoreVertical
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -88,25 +89,19 @@ export const FinancialManagement = () => {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 bg-background min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Financial Management</h1>
-          <p className="text-gray-600 mt-1">Track donations, expenses, and church finances</p>
+          <h1 className="text-3xl font-bold text-foreground">Finance</h1>
+          <p className="text-muted-foreground mt-1">Track donations, expenses, and church finances</p>
         </div>
         <div className="flex items-center space-x-3">
-          <select 
-            value={timeRange}
-            onChange={(e) => setTimeRange(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-          >
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="quarter">This Quarter</option>
-            <option value="year">This Year</option>
-          </select>
-          <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+          <Button variant="outline" className="text-muted-foreground">
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </Button>
+          <Button className="bg-primary text-primary-foreground">
             <Plus className="w-4 h-4 mr-2" />
             Add Transaction
           </Button>
@@ -115,74 +110,115 @@ export const FinancialManagement = () => {
 
       {/* Financial Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {financialStats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={index} className="relative overflow-hidden">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">
-                  {stat.title}
-                </CardTitle>
-                <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${stat.color} flex items-center justify-center`}>
-                  <Icon className="w-5 h-5 text-white" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-                <p className={`text-xs mt-1 ${stat.title === 'Total Expenses' ? 'text-green-600' : 'text-green-600'}`}>
-                  {stat.change}
+        <Card className="bg-card border-border">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Total Revenue</p>
+                <p className="text-2xl font-bold text-foreground">$45,678</p>
+                <p className="text-sm text-green-600 flex items-center mt-1">
+                  <TrendingUp className="w-4 h-4 mr-1" />
+                  +12.5%
                 </p>
-              </CardContent>
-            </Card>
-          );
-        })}
+              </div>
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-card border-border">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Total Expenses</p>
+                <p className="text-2xl font-bold text-foreground">$32,140</p>
+                <p className="text-sm text-green-600 flex items-center mt-1">
+                  <TrendingDown className="w-4 h-4 mr-1" />
+                  -5.2%
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <TrendingDown className="w-6 h-6 text-red-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-card border-border">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Net Balance</p>
+                <p className="text-2xl font-bold text-foreground">$13,538</p>
+                <p className="text-sm text-green-600 flex items-center mt-1">
+                  <TrendingUp className="w-4 h-4 mr-1" />
+                  +18.7%
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <DollarSign className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-card border-border">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Recurring Donors</p>
+                <p className="text-2xl font-bold text-foreground">234</p>
+                <p className="text-sm text-green-600 flex items-center mt-1">
+                  <TrendingUp className="w-4 h-4 mr-1" />
+                  +8 this month
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                <CreditCard className="w-6 h-6 text-purple-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Transactions */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 bg-card border-border">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center space-x-2">
-              <Receipt className="w-5 h-5" />
-              <span>Recent Transactions</span>
-            </CardTitle>
-            <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
-              Export
+            <CardTitle className="text-foreground">Recent Transactions</CardTitle>
+            <Button variant="ghost" size="sm">
+              <Eye className="w-4 h-4 mr-2" />
+              View All
             </Button>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-1">
               {recentTransactions.map((transaction) => (
-                <div key={transaction.id} className="flex items-center justify-between p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-                  <div className="flex items-center space-x-4">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                <div key={transaction.id} className="flex items-center justify-between py-3 border-b border-border last:border-b-0">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       transaction.type === 'Donation' 
                         ? 'bg-green-100 text-green-600' 
                         : 'bg-red-100 text-red-600'
                     }`}>
                       {transaction.type === 'Donation' ? (
-                        <TrendingUp className="w-6 h-6" />
+                        <TrendingUp className="w-4 h-4" />
                       ) : (
-                        <TrendingDown className="w-6 h-6" />
+                        <TrendingDown className="w-4 h-4" />
                       )}
                     </div>
                     <div>
-                      <h4 className="font-medium text-gray-900">{transaction.description}</h4>
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <span>{transaction.category}</span>
-                        <span>•</span>
-                        <span>{transaction.method}</span>
-                        <span>•</span>
-                        <span>{new Date(transaction.date).toLocaleDateString()}</span>
-                      </div>
+                      <p className="font-medium text-foreground text-sm">{transaction.description}</p>
+                      <p className="text-xs text-muted-foreground">{transaction.category}</p>
                     </div>
                   </div>
-                  <div className={`text-lg font-semibold ${
-                    transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    {transaction.amount > 0 ? '+' : ''}${Math.abs(transaction.amount).toLocaleString()}
+                  <div className="text-right">
+                    <p className={`font-semibold text-sm ${
+                      transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {transaction.amount > 0 ? '+' : ''}${Math.abs(transaction.amount).toLocaleString()}
+                    </p>
+                    <p className="text-xs text-muted-foreground">{new Date(transaction.date).toLocaleDateString()}</p>
                   </div>
                 </div>
               ))}
@@ -191,28 +227,22 @@ export const FinancialManagement = () => {
         </Card>
 
         {/* Income Breakdown */}
-        <Card>
+        <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <PieChart className="w-5 h-5" />
-              <span>Income Breakdown</span>
-            </CardTitle>
+            <CardTitle className="text-foreground">Income Breakdown</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {categoryBreakdown.map((category, index) => (
-                <div key={index} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-700">{category.name}</span>
-                    <span className="text-sm text-gray-600">{category.percentage}%</span>
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 rounded-full bg-primary"></div>
+                    <span className="text-sm text-foreground">{category.name}</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full"
-                      style={{ width: `${category.percentage}%` }}
-                    ></div>
+                  <div className="text-right">
+                    <p className="font-semibold text-sm text-foreground">${category.amount.toLocaleString()}</p>
+                    <p className="text-xs text-muted-foreground">{category.percentage}%</p>
                   </div>
-                  <span className="text-xs text-gray-500">${category.amount.toLocaleString()}</span>
                 </div>
               ))}
             </div>
@@ -220,29 +250,17 @@ export const FinancialManagement = () => {
         </Card>
       </div>
 
-      {/* Quick Actions */}
-      <Card>
+      {/* Financial Summary Chart Placeholder */}
+      <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle>Quick Financial Actions</CardTitle>
+          <CardTitle className="text-foreground">Financial Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button className="p-6 h-auto flex-col bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700">
-              <Plus className="w-8 h-8 mb-2" />
-              <span>Record Donation</span>
-            </Button>
-            <Button className="p-6 h-auto flex-col bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
-              <TrendingDown className="w-8 h-8 mb-2" />
-              <span>Add Expense</span>
-            </Button>
-            <Button className="p-6 h-auto flex-col bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
-              <Receipt className="w-8 h-8 mb-2" />
-              <span>Generate Report</span>
-            </Button>
-            <Button className="p-6 h-auto flex-col bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700">
-              <Download className="w-8 h-8 mb-2" />
-              <span>Export Data</span>
-            </Button>
+          <div className="h-64 flex items-center justify-center bg-muted/30 rounded-lg">
+            <div className="text-center">
+              <PieChart className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">Chart visualization will be displayed here</p>
+            </div>
           </div>
         </CardContent>
       </Card>
