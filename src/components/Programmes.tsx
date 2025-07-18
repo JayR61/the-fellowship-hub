@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 
+// Updated Programmes Component
 export const Programmes = () => {
   const [searchTerm, setSearchTerm] = useState('');
 

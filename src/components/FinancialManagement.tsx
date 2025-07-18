@@ -8,6 +8,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
+// Updated Financial Management Component
 export const FinancialManagement = () => {
   const [timeRange, setTimeRange] = useState('month');
 
